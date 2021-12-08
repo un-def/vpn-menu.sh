@@ -53,7 +53,7 @@ maybe_remove_active_marker() {
 connection_list() {
     nmcli --get-values name,type,active,state connection show \
     | awk -F ':' '
-        $2 != "vpn" { next }
+        $2 != "vpn" && $2 != "wireguard" { next }
         $3 == "yes" { $1 = "\a" $1 }
         { print $1 }
     ' \
@@ -65,7 +65,7 @@ disconnect_all() {
     active_connections=$(
         nmcli --get-values name,type connection show --active \
         | awk -F ':' '
-            $2 != "vpn" { next }
+            $2 != "vpn" && $2 != "wireguard" { next }
             { print $1 }
         '
     )
